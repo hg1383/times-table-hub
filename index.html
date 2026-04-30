@@ -1,0 +1,2628 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#fff9f0">
+<title>Times Tables Hub 🚀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     DESIGN TOKENS
+     ============================================================ */
+  :root {
+    /* Warm palette (matches Y6 hub) */
+    --bg: #fff9f0;
+    --card: #ffffff;
+    --border: #f0e6d3;
+    --ink: #1a1a2e;
+    --muted: #636e72;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+
+    /* Status */
+    --success: #10b981;
+    --success-bg: #d1fae5;
+    --error: #ef4444;
+    --error-bg: #fee2e2;
+    --warn: #f59e0b;
+    --gold: #fbbf24;
+
+    /* Lock state */
+    --locked: #d1d5db;
+    --locked-bg: #f3f4f6;
+
+    /* Per-table accent colours (vivid, kid-friendly) */
+    --c-2:  #ec4899;  /* pink */
+    --c-2-bg: #fce7f3;
+    --c-10: #f97316; /* orange */
+    --c-10-bg: #ffedd5;
+    --c-5:  #0ea5e9; /* sky blue */
+    --c-5-bg: #e0f2fe;
+    --c-3:  #22c55e; /* green */
+    --c-3-bg: #dcfce7;
+    --c-4:  #a855f7; /* purple */
+    --c-4-bg: #f3e8ff;
+    --c-6:  #14b8a6; /* teal */
+    --c-6-bg: #ccfbf1;
+    --c-9:  #eab308; /* gold-yellow */
+    --c-9-bg: #fef3c7;
+    --c-8:  #6366f1; /* indigo */
+    --c-8-bg: #e0e7ff;
+    --c-7:  #f43f5e; /* rose */
+    --c-7-bg: #ffe4e6;
+    --c-11: #84cc16; /* lime */
+    --c-11-bg: #ecfccb;
+    --c-12: #d946ef; /* fuchsia */
+    --c-12-bg: #fae8ff;
+
+    /* Mixed / MTC */
+    --c-mixed: #8b5cf6;
+    --c-mixed-bg: #ede9fe;
+    --c-mtc: #1a1a2e;
+    --c-mtc-bg: #fef3c7;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(236,72,153,0.08), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(14,165,233,0.08), transparent 40%),
+      radial-gradient(circle at 50% 90%, rgba(34,197,94,0.06), transparent 40%),
+      var(--bg);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-weight: 800;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  button {
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+  }
+
+  button:focus-visible {
+    outline: 3px solid var(--c-5);
+    outline-offset: 2px;
+  }
+
+  /* ============================================================
+     LAYOUT
+     ============================================================ */
+  .app {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 16px;
+    padding-bottom: 80px;
+  }
+
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 18px;
+  }
+
+  .top-bar .title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .top-bar .title .emoji { font-size: 1.4rem; }
+
+  .top-stats {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+  }
+
+  .top-stats .stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .back-btn {
+    padding: 10px 14px;
+    background: var(--border);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: transform 0.15s ease;
+  }
+
+  .back-btn:active { transform: scale(0.95); }
+
+  /* ============================================================
+     HOME SCREEN
+     ============================================================ */
+  .hero {
+    text-align: center;
+    padding: 24px 12px 28px;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero .sub {
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .hero .greet {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 380px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .table-card {
+    position: relative;
+    padding: 18px 14px 16px;
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .table-card:not(.locked):active {
+    transform: scale(0.97);
+    box-shadow: var(--shadow-md);
+  }
+
+  .table-card.locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: var(--locked-bg);
+  }
+
+  .table-card .emoji {
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .table-card .label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: var(--ink);
+  }
+
+  .table-card .sub-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .table-card .stars {
+    margin-top: 6px;
+    font-size: 1.05rem;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .table-card .lock-badge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 1.1rem;
+  }
+
+  .table-card .new-badge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 0.65rem;
+    padding: 3px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Per-table card colour stripes */
+  .table-card.t-2  { border-color: var(--c-2);  background: linear-gradient(180deg, var(--c-2-bg) 0%, var(--card) 60%); }
+  .table-card.t-10 { border-color: var(--c-10); background: linear-gradient(180deg, var(--c-10-bg) 0%, var(--card) 60%); }
+  .table-card.t-5  { border-color: var(--c-5);  background: linear-gradient(180deg, var(--c-5-bg) 0%, var(--card) 60%); }
+  .table-card.t-3  { border-color: var(--c-3);  background: linear-gradient(180deg, var(--c-3-bg) 0%, var(--card) 60%); }
+  .table-card.t-4  { border-color: var(--c-4);  background: linear-gradient(180deg, var(--c-4-bg) 0%, var(--card) 60%); }
+  .table-card.t-6  { border-color: var(--c-6);  background: linear-gradient(180deg, var(--c-6-bg) 0%, var(--card) 60%); }
+  .table-card.t-9  { border-color: var(--c-9);  background: linear-gradient(180deg, var(--c-9-bg) 0%, var(--card) 60%); }
+  .table-card.t-8  { border-color: var(--c-8);  background: linear-gradient(180deg, var(--c-8-bg) 0%, var(--card) 60%); }
+  .table-card.t-7  { border-color: var(--c-7);  background: linear-gradient(180deg, var(--c-7-bg) 0%, var(--card) 60%); }
+  .table-card.t-11 { border-color: var(--c-11); background: linear-gradient(180deg, var(--c-11-bg) 0%, var(--card) 60%); }
+  .table-card.t-12 { border-color: var(--c-12); background: linear-gradient(180deg, var(--c-12-bg) 0%, var(--card) 60%); }
+
+  .special-row {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .table-card.special-mixed {
+    border-color: var(--c-mixed);
+    background: linear-gradient(180deg, var(--c-mixed-bg) 0%, var(--card) 60%);
+  }
+
+  .table-card.special-mtc {
+    border-color: var(--c-mtc);
+    background: linear-gradient(180deg, var(--c-mtc-bg) 0%, var(--card) 60%);
+  }
+
+  /* ============================================================
+     SCREEN: TABLE DETAIL
+     ============================================================ */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeIn 0.2s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .table-header {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 22px;
+    padding: 22px 18px;
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .table-header .emoji {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .table-header h2 {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+
+  .table-header .tagline {
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  /* Mode tabs */
+  .mode-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .mode-tab {
+    padding: 14px 8px;
+    border-radius: 14px;
+    background: var(--card);
+    border: 2.5px solid var(--border);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--ink);
+    transition: all 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-height: 64px;
+  }
+
+  .mode-tab .icon { font-size: 1.3rem; line-height: 1; }
+  .mode-tab .text { font-size: 0.85rem; }
+
+  .mode-tab.active {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+    transform: translateY(-2px);
+  }
+
+  .mode-tab:active { transform: scale(0.97); }
+
+  /* ============================================================
+     LEARN MODE
+     ============================================================ */
+  .learn-card {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    padding: 20px 18px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .learn-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Skip-counting track */
+  .skip-track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding: 6px 0;
+  }
+
+  .skip-step {
+    min-width: 52px;
+    padding: 12px 8px;
+    border-radius: 12px;
+    background: var(--bg);
+    border: 2.5px solid var(--border);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .skip-step.highlight {
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Facts grid */
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .fact-row {
+    padding: 12px 14px;
+    background: var(--bg);
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    text-align: center;
+    border: 2px solid transparent;
+  }
+
+  /* Array visual (dots) */
+  .array-vis {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .array-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+  }
+
+  .array-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--ink);
+    color: white;
+    font-size: 1.4rem;
+    transition: transform 0.15s ease;
+  }
+
+  .array-btn:active { transform: scale(0.9); }
+  .array-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .array-display {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.2rem;
+    min-width: 90px;
+    text-align: center;
+  }
+
+  .array-grid {
+    display: grid;
+    gap: 6px;
+    padding: 14px;
+    background: var(--bg);
+    border-radius: 14px;
+    border: 2px solid var(--border);
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .array-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+  }
+
+  .array-result {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  /* Tip box */
+  .tip-box {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 2.5px solid #fbbf24;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 4px;
+  }
+
+  .tip-box h3 {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  .tip-box p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  /* ============================================================
+     QUIZ (PRACTICE & SPEED)
+     ============================================================ */
+  .quiz-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0 4px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+  }
+
+  .quiz-meta .timer {
+    background: var(--ink);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    min-width: 70px;
+    text-align: center;
+  }
+
+  .quiz-meta .timer.warn {
+    background: var(--warn);
+    animation: pulse 0.5s ease infinite alternate;
+  }
+
+  .quiz-meta .timer.danger {
+    background: var(--error);
+  }
+
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+  }
+
+  .progress-bar {
+    height: 10px;
+    background: var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--c-3), var(--c-5));
+    transition: width 0.3s ease;
+    border-radius: 8px;
+  }
+
+  .question-card {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 20px;
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-md);
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .question-text {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  .question-word {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.1rem, 4.5vw, 1.4rem);
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .activity-kicker {
+    display: inline-flex;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    color: var(--muted);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+
+  .wheel-activity {
+    display: grid;
+    place-items: center;
+    gap: 14px;
+  }
+
+  .wheel {
+    position: relative;
+    width: min(280px, 78vw);
+    aspect-ratio: 1;
+    border: 4px solid var(--ink);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at center, var(--card) 0 24%, transparent 25%),
+      conic-gradient(from -15deg, rgba(14,165,233,0.12) 0 30deg, rgba(236,72,153,0.12) 30deg 60deg, rgba(34,197,94,0.12) 60deg 90deg, rgba(251,191,36,0.16) 90deg 120deg, rgba(168,85,247,0.12) 120deg 150deg, rgba(249,115,22,0.12) 150deg 180deg, rgba(14,165,233,0.12) 180deg 210deg, rgba(236,72,153,0.12) 210deg 240deg, rgba(34,197,94,0.12) 240deg 270deg, rgba(251,191,36,0.16) 270deg 300deg, rgba(168,85,247,0.12) 300deg 330deg, rgba(249,115,22,0.12) 330deg 360deg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .wheel-centre {
+    position: absolute;
+    inset: 35%;
+    display: grid;
+    place-items: center;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    background: var(--card);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+  }
+
+  .wheel-number {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 34px;
+    height: 34px;
+    margin: -17px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid var(--border);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+  }
+
+  .wheel-number.active {
+    background: var(--ink);
+    color: white;
+    transform: rotate(var(--angle)) translateY(-105px) rotate(calc(-1 * var(--angle))) scale(1.18);
+  }
+
+  .mosaic-activity {
+    display: grid;
+    gap: 14px;
+  }
+
+  .mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  .mosaic-cell {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    display: grid;
+    place-items: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 0.95rem;
+  }
+
+  .mosaic-cell.done {
+    color: white;
+    border-color: transparent;
+  }
+
+  .mosaic-cell.target {
+    background: var(--ink);
+    color: white;
+    transform: scale(1.08);
+  }
+
+  .square-activity {
+    display: grid;
+    gap: 12px;
+  }
+
+  .mini-square {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    max-width: 330px;
+    margin: 0 auto;
+  }
+
+  .square-cell {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+  }
+
+  .square-cell.header {
+    background: var(--ink);
+    color: white;
+  }
+
+  .square-cell.target {
+    background: var(--c-5-bg);
+    border-color: var(--c-5);
+    color: var(--ink);
+    transform: scale(1.06);
+  }
+
+  .board-activity {
+    display: grid;
+    gap: 14px;
+  }
+
+  .board-path {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .path-space {
+    min-height: 54px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    background: var(--bg);
+    display: grid;
+    place-items: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    color: var(--muted);
+  }
+
+  .path-space.done {
+    background: var(--success-bg);
+    border-color: var(--success);
+    color: var(--success);
+  }
+
+  .path-space.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: white;
+    transform: scale(1.08);
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  @media (min-width: 420px) {
+    .options { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  }
+
+  .option-btn {
+    padding: 18px 12px;
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: var(--ink);
+    transition: all 0.12s ease;
+    min-height: 64px;
+  }
+
+  .option-btn:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .option-btn.correct {
+    background: var(--success-bg);
+    border-color: var(--success);
+    color: var(--success);
+  }
+
+  .option-btn.wrong {
+    background: var(--error-bg);
+    border-color: var(--error);
+    color: var(--error);
+  }
+
+  /* Feedback toast */
+  .feedback {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    text-align: center;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .feedback.correct {
+    background: var(--success-bg);
+    color: var(--success);
+    border: 2px solid var(--success);
+  }
+
+  .feedback.wrong {
+    background: var(--error-bg);
+    color: var(--error);
+    border: 2px solid var(--error);
+  }
+
+  /* ============================================================
+     RESULTS
+     ============================================================ */
+  .results-card {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 22px;
+    padding: 26px 20px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+
+  .results-card .big-emoji {
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .results-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+  }
+
+  .results-card .score-line {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 14px 0 6px;
+  }
+
+  .results-card .praise {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .star-display {
+    font-size: 2.6rem;
+    letter-spacing: 6px;
+    line-height: 1;
+    margin: 12px 0 16px;
+  }
+
+  .results-actions {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .btn-primary {
+    padding: 16px;
+    background: var(--ink);
+    color: white;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    transition: transform 0.15s ease;
+    min-height: 56px;
+  }
+
+  .btn-primary:active { transform: scale(0.97); }
+
+  .btn-secondary {
+    padding: 16px;
+    background: var(--card);
+    border: 2.5px solid var(--border);
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--ink);
+    min-height: 56px;
+  }
+
+  .results-card .pb-banner {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.95rem;
+  }
+
+  .results-card .unlock-banner {
+    margin-top: 10px;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--c-3-bg), var(--c-5-bg));
+    border: 2.5px solid var(--c-3);
+    border-radius: 14px;
+    font-weight: 900;
+    font-size: 1.1rem;
+    animation: bounce 0.6s ease;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* ============================================================
+     MTC MODE
+     ============================================================ */
+  .mtc-question {
+    background: var(--card);
+    border: 4px solid var(--ink);
+    border-radius: 22px;
+    padding: 26px 18px;
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .mtc-q-text {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 10vw, 3rem);
+    margin-bottom: 14px;
+  }
+
+  .mtc-answer-box {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 2.4rem;
+    min-height: 70px;
+    background: var(--bg);
+    border: 3px dashed var(--border);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+    letter-spacing: 4px;
+  }
+
+  .numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .numpad-btn {
+    padding: 18px 0;
+    background: var(--card);
+    border: 2.5px solid var(--border);
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    min-height: 60px;
+    transition: transform 0.1s ease, background 0.1s ease;
+  }
+
+  .numpad-btn:active {
+    transform: scale(0.92);
+    background: var(--border);
+  }
+
+  .numpad-btn.action {
+    background: var(--ink);
+    color: white;
+    font-size: 1rem;
+  }
+
+  .numpad-btn.enter { background: var(--success); color: white; font-size: 1.05rem; }
+  .numpad-btn.del { background: var(--warn); color: white; font-size: 1.05rem; }
+
+  .mtc-timer-bar {
+    height: 14px;
+    background: var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .mtc-timer-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), var(--warn));
+    transition: width 0.1s linear;
+  }
+
+  .mtc-rest {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--card);
+    border-radius: 20px;
+    border: 3px solid var(--border);
+  }
+
+  .mtc-rest .countdown {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 5rem;
+    color: var(--c-5);
+    line-height: 1;
+  }
+
+  .mtc-rest p { font-weight: 800; font-size: 1.1rem; margin-top: 8px; }
+
+  /* MTC results breakdown */
+  .breakdown {
+    margin-top: 14px;
+    padding: 14px;
+    background: var(--bg);
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .breakdown h4 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-row .pct.good { color: var(--success); }
+  .breakdown-row .pct.bad { color: var(--error); }
+
+  /* ============================================================
+     CONFETTI
+     ============================================================ */
+  .confetti {
+    position: fixed;
+    top: -20px;
+    width: 10px;
+    height: 14px;
+    z-index: 1000;
+    pointer-events: none;
+    animation: fall 2s linear forwards;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; }
+  }
+
+  /* ============================================================
+     UTILITIES
+     ============================================================ */
+  .hidden { display: none !important; }
+
+  .footer-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 24px;
+  }
+
+  /* Reset progress button */
+  .reset-area {
+    margin-top: 28px;
+    text-align: center;
+  }
+
+  .reset-btn {
+    background: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: underline;
+    padding: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="title">
+      <span class="emoji">🚀</span>
+      <span>Times Tables</span>
+    </div>
+    <div class="top-stats">
+      <div class="stat" title="Total stars">⭐ <span id="totalStars">0</span></div>
+      <div class="stat" title="Best streak">🔥 <span id="bestStreak">0</span></div>
+    </div>
+  </div>
+
+  <!-- ===== HOME SCREEN ===== -->
+  <div id="screen-home" class="screen active">
+    <div class="hero">
+      <h1>Let's smash <br>those tables! 💪</h1>
+      <div class="sub">Pick a table to practise</div>
+      <div class="greet" id="greeting"></div>
+    </div>
+
+    <div id="tablesGrid" class="grid"></div>
+
+    <div class="special-row" id="specialRow"></div>
+
+    <div class="reset-area">
+      <button class="reset-btn" id="resetBtn">Reset all progress</button>
+    </div>
+
+    <div class="footer-note">Made for big maths brains 🧠</div>
+  </div>
+
+  <!-- ===== TABLE DETAIL SCREEN ===== -->
+  <div id="screen-table" class="screen">
+    <button class="back-btn" id="backFromTable">← Back</button>
+
+    <div class="table-header" id="tableHeader"></div>
+
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-mode="learn">
+        <span class="icon">🎓</span><span class="text">Learn</span>
+      </button>
+      <button class="mode-tab" data-mode="practice">
+        <span class="icon">🎯</span><span class="text">Practise</span>
+      </button>
+      <button class="mode-tab" data-mode="speed">
+        <span class="icon">⚡</span><span class="text">Speed</span>
+      </button>
+    </div>
+
+    <div id="modeContent"></div>
+  </div>
+
+  <!-- ===== QUIZ SCREEN (Practice / Speed / Mixed) ===== -->
+  <div id="screen-quiz" class="screen">
+    <button class="back-btn" id="backFromQuiz">← Quit</button>
+
+    <div class="quiz-meta">
+      <div id="quizProgress">Question 1 of 10</div>
+      <div id="quizTimer" class="timer hidden">2:00</div>
+    </div>
+
+    <div class="progress-bar">
+      <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+    </div>
+
+    <div class="question-card" id="questionCard"></div>
+
+    <div class="options" id="optionsContainer"></div>
+
+    <div class="feedback hidden" id="feedback"></div>
+  </div>
+
+  <!-- ===== RESULTS SCREEN ===== -->
+  <div id="screen-results" class="screen">
+    <div class="results-card" id="resultsCard"></div>
+  </div>
+
+  <!-- ===== MTC SCREEN ===== -->
+  <div id="screen-mtc" class="screen">
+    <button class="back-btn" id="backFromMTC">← Quit</button>
+
+    <div class="quiz-meta">
+      <div id="mtcProgress">Question 1 of 25</div>
+      <div id="mtcScore" style="font-weight: 800;">Score: 0</div>
+    </div>
+
+    <div class="mtc-timer-bar">
+      <div id="mtcTimerFill" class="mtc-timer-fill" style="width: 100%"></div>
+    </div>
+
+    <div id="mtcContent"></div>
+  </div>
+
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+   CONFIG
+   ============================================================ */
+
+// Pedagogical learning order (NC + standard primary practice)
+const TABLE_ORDER = [2, 10, 5, 3, 4, 6, 9, 8, 7, 11, 12];
+
+const TABLE_META = {
+  2:  { emoji: '🐶', label: '2× table',  tagline: 'Doubles!',           tip: '2× is just doubling. If you know 5 + 5 = 10, you know 2 × 5 = 10!' },
+  10: { emoji: '🚀', label: '10× table', tagline: 'Magic zero!',        tip: 'Easy! Just stick a 0 on the end. 10 × 7 = 70. Boom!' },
+  5:  { emoji: '🖐️', label: '5× table',  tagline: 'High fives!',        tip: '5× answers always end in 0 or 5. It\'s half of the 10× table!' },
+  3:  { emoji: '🌳', label: '3× table',  tagline: 'Triple it!',         tip: '3× is doubling and then adding one more group. Skip count: 3, 6, 9, 12, 15...' },
+  4:  { emoji: '🚗', label: '4× table',  tagline: 'Double-double!',     tip: '4× = double, then double again. 4 × 6: double 6 = 12, double 12 = 24!' },
+  6:  { emoji: '🐝', label: '6× table',  tagline: 'Bee fast!',          tip: '6× = (5× the number) + (1× the number). 6 × 7 = 35 + 7 = 42!' },
+  9:  { emoji: '🦄', label: '9× table',  tagline: 'Finger trick!',      tip: 'For 9×: hold up 10 fingers. Fold the Nth finger. Fingers left of fold = tens, right = ones. Magic!' },
+  8:  { emoji: '🐙', label: '8× table',  tagline: 'Double-double-double!', tip: '8× = double 3 times! 8 × 4: 4 → 8 → 16 → 32!' },
+  7:  { emoji: '🌈', label: '7× table',  tagline: 'Tricky but cool!',   tip: '7× is the trickiest! Use what you know: 7 × 6 = 6 × 7. Practise these the most!' },
+  11: { emoji: '🦓', label: '11× table', tagline: 'Mirror magic!',      tip: 'For 11 × any single digit, just write the digit twice! 11 × 4 = 44.' },
+  12: { emoji: '👑', label: '12× table', tagline: 'King of tables!',    tip: '12× = (10× the number) + (2× the number). 12 × 7 = 70 + 14 = 84!' },
+};
+
+const MTC_REQUIRED_3_STARS = 5; // need 3★ on this many tables to unlock MTC
+const MIXED_REQUIRED_TABLES = 3; // need 2★ on this many tables to unlock Mixed
+
+const STORAGE_KEY = 'tt-progress-v1';
+
+/* ============================================================
+   STATE & PERSISTENCE
+   ============================================================ */
+
+let state = {
+  stars: {},      // { 2: { practice: true, speed2: true, speed3: false, pb: 18 }, ... }
+  unlocked: [2],  // array of unlocked tables
+  bestStreak: 0,
+  currentStreak: 0,
+  mtcBest: 0,
+};
+
+async function loadState() {
+  try {
+    let raw = null;
+
+    if (window.storage?.get) {
+      const result = await window.storage.get(STORAGE_KEY);
+      raw = result?.value;
+    } else if (window.localStorage) {
+      raw = localStorage.getItem(STORAGE_KEY);
+    }
+
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      state = { ...state, ...parsed };
+    }
+  } catch (e) {
+    // First run or storage unavailable - keep defaults
+  }
+  // Ensure 2 is always unlocked
+  if (!state.unlocked.includes(2)) state.unlocked.push(2);
+}
+
+async function saveState() {
+  try {
+    const raw = JSON.stringify(state);
+
+    if (window.storage?.set) {
+      await window.storage.set(STORAGE_KEY, raw);
+    } else if (window.localStorage) {
+      localStorage.setItem(STORAGE_KEY, raw);
+    }
+  } catch (e) {
+    console.warn('Save failed', e);
+  }
+}
+
+function getTableProgress(t) {
+  return state.stars[t] || { practice: false, speed2: false, speed3: false, pb: 0 };
+}
+
+function setTableProgress(t, prog) {
+  state.stars[t] = prog;
+}
+
+function tableStarCount(t) {
+  const p = getTableProgress(t);
+  let c = 0;
+  if (p.practice) c++;
+  if (p.speed2) c++;
+  if (p.speed3) c++;
+  return c;
+}
+
+function totalStars() {
+  return TABLE_ORDER.reduce((sum, t) => sum + tableStarCount(t), 0);
+}
+
+function tablesWithStars(min) {
+  return TABLE_ORDER.filter(t => tableStarCount(t) >= min);
+}
+
+/* Unlock the next table after the current one */
+function checkUnlocks(justCompletedTable) {
+  const stars = tableStarCount(justCompletedTable);
+  if (stars >= 2) {
+    const idx = TABLE_ORDER.indexOf(justCompletedTable);
+    if (idx >= 0 && idx + 1 < TABLE_ORDER.length) {
+      const next = TABLE_ORDER[idx + 1];
+      if (!state.unlocked.includes(next)) {
+        state.unlocked.push(next);
+        return next;
+      }
+    }
+  }
+  return null;
+}
+
+/* ============================================================
+   QUESTION GENERATION
+   ============================================================ */
+
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pickN(arr, n) {
+  return shuffle(arr).slice(0, n);
+}
+
+const WORD_TEMPLATES = [
+  (n, k) => `There are ${k} packs with ${n} stickers in each. How many stickers altogether?`,
+  (n, k) => `${k} children each have ${n} sweets. How many sweets in total?`,
+  (n, k) => `A spider has ${n} legs. How many legs do ${k} spiders have?`,
+  (n, k) => `${k} bags contain ${n} apples each. How many apples in total?`,
+  (n, k) => `A football team has ${n} players. How many players in ${k} teams?`,
+  (n, k) => `${k} flowers each have ${n} petals. How many petals altogether?`,
+];
+
+/**
+ * Generate a question for table t.
+ * Question types: 0=direct, 1=reversed, 2=missing-factor, 3=division, 4=word
+ * For Year 2/3 we keep word problems simple and avoid division/missing-factor for unfamiliar tables.
+ */
+function generateQuestion(t, opts = {}) {
+  const { allowComplex = true, mcOnly = false, k: fixedK = null } = opts;
+  const k = fixedK || rand(1, 12);
+  const product = t * k;
+
+  // Type weights: lean heavy on direct/reversed for younger learners
+  let type;
+  if (!allowComplex) {
+    type = rand(0, 1);
+  } else {
+    const r = Math.random();
+    if (r < 0.4)        type = 0;       // direct
+    else if (r < 0.65)  type = 1;       // reversed
+    else if (r < 0.80)  type = 2;       // missing factor
+    else if (r < 0.92)  type = 3;       // division
+    else                type = 4;       // word
+  }
+
+  // MTC-only mode: direct multiplication only
+  if (mcOnly) type = Math.random() < 0.5 ? 0 : 1;
+
+  let prompt, answer, isWord = false;
+
+  switch (type) {
+    case 0: // direct: t × k
+      prompt = `${t} × ${k} = ?`;
+      answer = product;
+      break;
+    case 1: // reversed: k × t
+      prompt = `${k} × ${t} = ?`;
+      answer = product;
+      break;
+    case 2: // missing factor: t × ? = product
+      prompt = `${t} × ? = ${product}`;
+      answer = k;
+      break;
+    case 3: // division: product ÷ t
+      prompt = `${product} ÷ ${t} = ?`;
+      answer = k;
+      break;
+    case 4: // word
+      prompt = WORD_TEMPLATES[rand(0, WORD_TEMPLATES.length - 1)](t, k);
+      answer = product;
+      isWord = true;
+      break;
+  }
+
+  return { type, prompt, answer, t, k, product, isWord };
+}
+
+function buildFullTableQuestions(tables, total, opts = {}) {
+  const questions = [];
+  const perTableQueues = new Map();
+
+  tables.forEach(t => perTableQueues.set(t, []));
+
+  while (questions.length < total) {
+    const t = tables[questions.length % tables.length];
+    let queue = perTableQueues.get(t);
+    if (!queue || queue.length === 0) {
+      queue = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+      perTableQueues.set(t, queue);
+    }
+
+    const k = queue.shift();
+    const q = generateQuestion(t, { ...opts, k });
+    const { options, correct } = generateOptions(q);
+    questions.push({ q, options, correct });
+  }
+
+  return questions;
+}
+
+/**
+ * Generate plausible-misconception distractors.
+ * Returns 3 unique options (incl. correct answer) shuffled.
+ */
+function generateOptions(q) {
+  const correct = q.answer;
+  const distractors = new Set();
+
+  // Strategy: build a pool of plausible wrong answers, then pick 2 unique ones
+  const pool = [];
+
+  // Off-by-one in the table (neighbour products)
+  if (q.type === 0 || q.type === 1 || q.type === 4) {
+    // For t × k, neighbour products
+    const t = q.t, k = q.k;
+    if (k > 1) pool.push(t * (k - 1));
+    pool.push(t * (k + 1));
+    if (t > 1) pool.push((t - 1) * k);
+    pool.push((t + 1) * k);
+  } else if (q.type === 2) {
+    // missing factor: answer is k. Distractors are k-1, k+1, and product or t
+    if (q.k > 1) pool.push(q.k - 1);
+    pool.push(q.k + 1);
+    if (q.k > 2) pool.push(q.k - 2);
+    pool.push(q.k + 2);
+  } else if (q.type === 3) {
+    // division: answer is k. Same neighbours
+    if (q.k > 1) pool.push(q.k - 1);
+    pool.push(q.k + 1);
+    if (q.k > 2) pool.push(q.k - 2);
+    pool.push(q.k + 2);
+  }
+
+  // Add/subtract confusion (only for product-based answers)
+  if (q.type === 0 || q.type === 1 || q.type === 4) {
+    pool.push(q.t + q.k);                  // mixed up × with +
+    if (q.t * q.k - q.k > 0) pool.push(q.t * q.k - q.k); // forgot a group
+    pool.push(q.t * q.k + q.k);            // one extra group
+  }
+
+  // Off-by-table (close products)
+  if (q.type === 0 || q.type === 1 || q.type === 4) {
+    pool.push(q.product + q.t);
+    if (q.product - q.t > 0) pool.push(q.product - q.t);
+  }
+
+  // Random small deviations as fallback
+  pool.push(correct + rand(2, 5));
+  if (correct > 5) pool.push(correct - rand(2, 5));
+
+  // Filter: must be positive, must not equal correct, must be reasonable
+  const filtered = pool.filter(n => n > 0 && n !== correct && n < 200);
+
+  // Pick 2 unique distractors
+  const shuffled = shuffle(filtered);
+  for (const d of shuffled) {
+    if (distractors.size >= 2) break;
+    distractors.add(d);
+  }
+
+  // Fallback: if we somehow don't have 2 distractors, top up with safe near-values
+  let safety = 0;
+  while (distractors.size < 2 && safety < 50) {
+    const candidate = correct + (rand(0, 1) ? 1 : -1) * rand(1, 6);
+    if (candidate > 0 && candidate !== correct) {
+      distractors.add(candidate);
+    }
+    safety++;
+  }
+
+  const options = shuffle([correct, ...Array.from(distractors).slice(0, 2)]);
+  return { options, correct };
+}
+
+/* ============================================================
+   GENERATOR VALIDATION (development self-test)
+   ============================================================ */
+
+function validateGenerators() {
+  const errors = [];
+  let runs = 0;
+
+  for (let t = 2; t <= 12; t++) {
+    for (let i = 0; i < 100; i++) {
+      runs++;
+      try {
+        const q = generateQuestion(t);
+        // Sanity: prompt and answer exist
+        if (q.answer === undefined || q.answer === null) {
+          errors.push(`No answer for table ${t}, type ${q.type}`);
+          continue;
+        }
+        if (typeof q.prompt !== 'string' || q.prompt.length === 0) {
+          errors.push(`Empty prompt for table ${t}`);
+          continue;
+        }
+
+        // Validate options
+        const { options, correct } = generateOptions(q);
+        if (options.length !== 3) {
+          errors.push(`Wrong option count for ${q.prompt}: ${options.length}`);
+          continue;
+        }
+        // No duplicates
+        if (new Set(options).size !== 3) {
+          errors.push(`Duplicate options for ${q.prompt}: ${options.join(',')}`);
+          continue;
+        }
+        // Correct answer must be in options exactly once
+        const correctCount = options.filter(o => o === correct).length;
+        if (correctCount !== 1) {
+          errors.push(`Correct answer not unique in options for ${q.prompt}`);
+          continue;
+        }
+        // All options positive
+        if (options.some(o => o <= 0)) {
+          errors.push(`Non-positive option for ${q.prompt}: ${options.join(',')}`);
+        }
+      } catch (e) {
+        errors.push(`Exception for table ${t}: ${e.message}`);
+      }
+    }
+  }
+
+  console.log(`[Validate] ${runs} questions tested. Errors: ${errors.length}`);
+  if (errors.length > 0) {
+    console.warn('Generator errors:', errors.slice(0, 10));
+  }
+  return errors.length === 0;
+}
+
+/* ============================================================
+   SCREEN MANAGEMENT
+   ============================================================ */
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('screen-' + id);
+  if (target) target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+/* ============================================================
+   HOME SCREEN RENDER
+   ============================================================ */
+
+function renderHome() {
+  // Update top stats
+  document.getElementById('totalStars').textContent = totalStars();
+  document.getElementById('bestStreak').textContent = state.bestStreak || 0;
+
+  // Greeting based on progress
+  const grid = document.getElementById('tablesGrid');
+  grid.innerHTML = '';
+
+  const greeting = document.getElementById('greeting');
+  const stars = totalStars();
+  if (stars === 0)         greeting.textContent = '👋 Start with the 2× table!';
+  else if (stars < 6)      greeting.textContent = '👍 Nice start! Keep going!';
+  else if (stars < 15)     greeting.textContent = '🔥 You\'re on fire!';
+  else if (stars < 25)     greeting.textContent = '🌟 Maths superstar!';
+  else                     greeting.textContent = '🏆 Times tables champion!';
+
+  // Render each table card
+  TABLE_ORDER.forEach((t, idx) => {
+    const meta = TABLE_META[t];
+    const isUnlocked = state.unlocked.includes(t);
+    const stars = tableStarCount(t);
+    const prog = getTableProgress(t);
+
+    const card = document.createElement('div');
+    card.className = `table-card t-${t}` + (isUnlocked ? '' : ' locked');
+
+    let starHtml = '';
+    if (isUnlocked) {
+      starHtml = '<div class="stars">';
+      for (let i = 0; i < 3; i++) {
+        starHtml += i < stars ? '⭐' : '☆';
+      }
+      starHtml += '</div>';
+    }
+
+    let badge = '';
+    if (!isUnlocked) {
+      badge = '<div class="lock-badge">🔒</div>';
+    } else if (stars === 0 && prog.pb === 0) {
+      badge = '<div class="new-badge">NEW</div>';
+    }
+
+    card.innerHTML = `
+      ${badge}
+      <div class="emoji">${meta.emoji}</div>
+      <div class="label">${meta.label}</div>
+      <div class="sub-label">${meta.tagline}</div>
+      ${starHtml}
+    `;
+
+    if (isUnlocked) {
+      card.addEventListener('click', () => openTable(t));
+    } else {
+      card.addEventListener('click', () => {
+        const idx = TABLE_ORDER.indexOf(t);
+        const prev = TABLE_ORDER[idx - 1];
+        const prevMeta = prev ? TABLE_META[prev] : null;
+        if (prevMeta) {
+          alert(`🔒 Get 2 stars on the ${prevMeta.label} to unlock this one!`);
+        }
+      });
+    }
+
+    grid.appendChild(card);
+  });
+
+  // Special row: Mixed and MTC
+  const specialRow = document.getElementById('specialRow');
+  specialRow.innerHTML = '';
+
+  const mixedAvail = tablesWithStars(2).length >= MIXED_REQUIRED_TABLES;
+  const mtcAvail = tablesWithStars(3).length >= MTC_REQUIRED_3_STARS;
+
+  // Mixed card
+  const mixedCard = document.createElement('div');
+  mixedCard.className = 'table-card special-mixed' + (mixedAvail ? '' : ' locked');
+  mixedCard.innerHTML = `
+    ${mixedAvail ? '' : '<div class="lock-badge">🔒</div>'}
+    <div class="emoji">🎲</div>
+    <div class="label">Mixed</div>
+    <div class="sub-label">${mixedAvail ? 'Random tables!' : `2★ on ${MIXED_REQUIRED_TABLES} tables`}</div>
+  `;
+  if (mixedAvail) {
+    mixedCard.addEventListener('click', () => startMixed());
+  } else {
+    mixedCard.addEventListener('click', () => {
+      alert(`🔒 Earn 2 stars on at least ${MIXED_REQUIRED_TABLES} tables to unlock Mixed mode!`);
+    });
+  }
+  specialRow.appendChild(mixedCard);
+
+  // MTC card
+  const mtcCard = document.createElement('div');
+  mtcCard.className = 'table-card special-mtc' + (mtcAvail ? '' : ' locked');
+  const pbHtml = mtcAvail && state.mtcBest ? `<div class="stars" style="font-size: 0.9rem; color: var(--ink);">Best: ${state.mtcBest}/25</div>` : '';
+  mtcCard.innerHTML = `
+    ${mtcAvail ? '' : '<div class="lock-badge">🔒</div>'}
+    <div class="emoji">🏆</div>
+    <div class="label">MTC</div>
+    <div class="sub-label">${mtcAvail ? 'The Year 4 test!' : `3★ on ${MTC_REQUIRED_3_STARS} tables`}</div>
+    ${pbHtml}
+  `;
+  if (mtcAvail) {
+    mtcCard.addEventListener('click', () => startMTC());
+  } else {
+    mtcCard.addEventListener('click', () => {
+      alert(`🏆 The Year 4 test! Earn 3 stars on ${MTC_REQUIRED_3_STARS} tables to unlock.`);
+    });
+  }
+  specialRow.appendChild(mtcCard);
+}
+
+/* ============================================================
+   TABLE DETAIL SCREEN
+   ============================================================ */
+
+let currentTable = null;
+let currentMode = 'learn';
+
+function openTable(t) {
+  currentTable = t;
+  currentMode = 'learn';
+  const meta = TABLE_META[t];
+
+  const header = document.getElementById('tableHeader');
+  header.innerHTML = `
+    <span class="emoji">${meta.emoji}</span>
+    <h2>${meta.label}</h2>
+    <div class="tagline">${meta.tagline}</div>
+  `;
+  header.style.borderColor = `var(--c-${t})`;
+
+  // Activate learn tab by default
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+  document.querySelector('.mode-tab[data-mode="learn"]').classList.add('active');
+
+  renderLearnMode(t);
+  showScreen('table');
+}
+
+function renderLearnMode(t) {
+  const meta = TABLE_META[t];
+  const accent = `var(--c-${t})`;
+  const accentBg = `var(--c-${t}-bg)`;
+
+  // Skip-counting track
+  let skipHtml = '';
+  for (let i = 1; i <= 12; i++) {
+    skipHtml += `<div class="skip-step" style="border-color: ${accent}; color: ${accent};">${t * i}</div>`;
+  }
+
+  // Facts grid
+  let factsHtml = '';
+  for (let i = 1; i <= 12; i++) {
+    factsHtml += `
+      <div class="fact-row" style="background: ${accentBg}; border-color: ${accent};">
+        ${t} × ${i} = <strong>${t * i}</strong>
+      </div>
+    `;
+  }
+
+  document.getElementById('modeContent').innerHTML = `
+    <div class="learn-card">
+      <h3>🧮 Skip count</h3>
+      <p style="color: var(--muted); font-size: 0.9rem; margin: 0 0 12px;">Tap the numbers and say them out loud!</p>
+      <div class="skip-track" id="skipTrack">${skipHtml}</div>
+    </div>
+
+    <div class="learn-card">
+      <h3>🔢 Show me!</h3>
+      <p style="color: var(--muted); font-size: 0.9rem; margin: 0 0 12px;">See it as groups of dots.</p>
+      <div class="array-vis">
+        <div class="array-controls">
+          <button class="array-btn" id="arrayMinus">−</button>
+          <div class="array-display"><span id="arrayK">3</span> groups of ${t}</div>
+          <button class="array-btn" id="arrayPlus">+</button>
+        </div>
+        <div class="array-grid" id="arrayGrid"></div>
+        <div class="array-result" style="color: ${accent};">${t} × <span id="arrayKLabel">3</span> = <span id="arrayProduct">${t * 3}</span></div>
+      </div>
+    </div>
+
+    <div class="learn-card">
+      <h3>📋 The full table</h3>
+      <div class="facts-grid">${factsHtml}</div>
+    </div>
+
+    <div class="tip-box">
+      <h3>💡 Top tip!</h3>
+      <p>${meta.tip}</p>
+    </div>
+
+    <div style="margin-top: 18px; display: grid; gap: 10px;">
+      <button class="btn-primary" onclick="switchMode('practice')">🎯 Ready to practise!</button>
+    </div>
+  `;
+
+  // Wire up skip track tap-to-highlight
+  document.querySelectorAll('#skipTrack .skip-step').forEach((el, idx) => {
+    el.addEventListener('click', () => {
+      el.classList.toggle('highlight');
+      el.style.background = el.classList.contains('highlight') ? accent : '';
+      el.style.color = el.classList.contains('highlight') ? 'white' : accent;
+    });
+  });
+
+  // Wire up array
+  let arrayK = 3;
+  function renderArray() {
+    document.getElementById('arrayK').textContent = arrayK;
+    document.getElementById('arrayKLabel').textContent = arrayK;
+    document.getElementById('arrayProduct').textContent = t * arrayK;
+
+    const grid = document.getElementById('arrayGrid');
+    grid.style.gridTemplateColumns = `repeat(${t}, 1fr)`;
+    let dots = '';
+    for (let i = 0; i < t * arrayK; i++) {
+      dots += `<div class="array-dot" style="background: ${accent};"></div>`;
+    }
+    grid.innerHTML = dots;
+
+    document.getElementById('arrayMinus').disabled = arrayK <= 1;
+    document.getElementById('arrayPlus').disabled = arrayK >= 10;
+  }
+  renderArray();
+
+  document.getElementById('arrayMinus').addEventListener('click', () => {
+    if (arrayK > 1) { arrayK--; renderArray(); }
+  });
+  document.getElementById('arrayPlus').addEventListener('click', () => {
+    if (arrayK < 10) { arrayK++; renderArray(); }
+  });
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+
+  if (mode === 'learn') {
+    renderLearnMode(currentTable);
+  } else if (mode === 'practice') {
+    document.getElementById('modeContent').innerHTML = `
+      <div class="learn-card">
+        <h3>🎯 Practice mode</h3>
+        <p style="margin: 8px 0 14px; line-height: 1.5;">24 questions. Two full trips through the table. No timer.</p>
+        <p style="margin: 0 0 14px; font-size: 0.9rem; color: var(--muted);">80%+ earns a star. Perfect is still the big win! ⭐</p>
+        <div class="results-actions" style="margin-top: 0;">
+          <button class="btn-primary" onclick="startQuiz('practice', 'mixed-style')">Surprise me!</button>
+          <button class="btn-secondary" onclick="startQuiz('practice', 'wheel')">Multiplication wheel</button>
+          <button class="btn-secondary" onclick="startQuiz('practice', 'mosaic')">Mosaic tiles</button>
+          <button class="btn-secondary" onclick="startQuiz('practice', 'square')">Multiplication square</button>
+          <button class="btn-secondary" onclick="startQuiz('practice', 'board')">Board path</button>
+        </div>
+      </div>
+    `;
+  } else if (mode === 'speed') {
+    const prog = getTableProgress(currentTable);
+    const pbHtml = prog.pb ? `<p style="margin: 0 0 8px; font-weight: 800;">⚡ Personal best: ${prog.pb}/24</p>` : '';
+    document.getElementById('modeContent').innerHTML = `
+      <div class="learn-card">
+        <h3>⚡ Speed mode</h3>
+        <p style="margin: 8px 0 12px; line-height: 1.5;">24 questions. Two full trips through the table. 2 minutes. Go go go!</p>
+        ${pbHtml}
+        <p style="margin: 0 0 14px; font-size: 0.9rem; color: var(--muted);">
+          80%+ = speed star ⭐⭐<br>
+          100% = champion star ⭐⭐⭐
+        </p>
+        <button class="btn-primary" onclick="startQuiz('speed', 'board')">Go!</button>
+      </div>
+    `;
+  }
+}
+
+/* ============================================================
+   QUIZ ENGINE (Practice / Speed / Mixed)
+   ============================================================ */
+
+let quiz = null;
+let quizAdvanceTimer = null;
+
+function clearQuizAdvanceTimer() {
+  if (quizAdvanceTimer) {
+    clearTimeout(quizAdvanceTimer);
+    quizAdvanceTimer = null;
+  }
+}
+
+const PRACTICE_STYLES = ['classic', 'wheel', 'mosaic', 'square', 'board'];
+
+function pickPracticeStyle(requested) {
+  if (requested === 'mixed-style') return PRACTICE_STYLES[rand(0, PRACTICE_STYLES.length - 1)];
+  return PRACTICE_STYLES.includes(requested) ? requested : 'classic';
+}
+
+function startQuiz(mode, activityStyle = 'classic') {
+  clearQuizAdvanceTimer();
+  const isMixed = mode === 'mixed';
+  const isSpeed = mode === 'speed' || isMixed;
+  const total = 24;
+  const style = isSpeed ? 'board' : pickPracticeStyle(activityStyle);
+
+  // Build questions
+  const tables = isMixed
+    ? tablesWithStars(2) // mixed pulls from tables they've earned 2★ on
+    : [currentTable];
+  const opts = isSpeed ? { allowComplex: false } : { allowComplex: true };
+  const questions = buildFullTableQuestions(tables, total, opts);
+
+  quiz = {
+    mode,
+    activityStyle: isMixed ? 'classic' : style,
+    isMixed,
+    isSpeed,
+    questions,
+    index: 0,
+    correct: 0,
+    timeLimit: isSpeed ? 120 : 0,
+    timeLeft: isSpeed ? 120 : 0,
+    timer: null,
+    table: currentTable,
+    answeredCorrectly: [],
+    responseTimes: [],
+    questionStartedAt: 0,
+  };
+
+  showScreen('quiz');
+  document.getElementById('quizTimer').classList.toggle('hidden', !isSpeed);
+  document.getElementById('feedback').classList.add('hidden');
+
+  if (isSpeed) {
+    startTimer();
+  }
+  renderQuestion();
+}
+
+function startTimer() {
+  updateTimerDisplay();
+  quiz.timer = setInterval(() => {
+    quiz.timeLeft--;
+    updateTimerDisplay();
+    if (quiz.timeLeft <= 0) {
+      finishQuiz();
+    }
+  }, 1000);
+}
+
+function updTimerColour() {
+  const el = document.getElementById('quizTimer');
+  el.classList.remove('warn', 'danger');
+  if (quiz.timeLeft <= 10) el.classList.add('danger');
+  else if (quiz.timeLeft <= 30) el.classList.add('warn');
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(quiz.timeLeft / 60);
+  const s = quiz.timeLeft % 60;
+  document.getElementById('quizTimer').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+  updTimerColour();
+}
+
+function formatTime(seconds) {
+  const safe = Math.max(0, Math.round(seconds));
+  const m = Math.floor(safe / 60);
+  const s = safe % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function renderQuestion() {
+  const cur = quiz.questions[quiz.index];
+  const total = quiz.questions.length;
+
+  document.getElementById('quizProgress').textContent = `Question ${quiz.index + 1} of ${total}`;
+  document.getElementById('progressFill').style.width = `${(quiz.index / total) * 100}%`;
+
+  const card = document.getElementById('questionCard');
+  card.className = 'question-card';
+  card.innerHTML = renderActivityQuestion(cur, quiz.activityStyle);
+
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  cur.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => answerQuestion(opt, btn));
+    container.appendChild(btn);
+  });
+
+  document.getElementById('feedback').classList.add('hidden');
+  quiz.questionStartedAt = Date.now();
+}
+
+function renderActivityQuestion(cur, style) {
+  if (style === 'wheel') return renderWheelQuestion(cur);
+  if (style === 'mosaic') return renderMosaicQuestion(cur);
+  if (style === 'square') return renderSquareQuestion(cur);
+  if (style === 'board') return renderBoardQuestion(cur);
+  const body = cur.q.isWord
+    ? `<div class="question-word">${cur.q.prompt}</div>`
+    : `<div class="question-text">${cur.q.prompt}</div>`;
+  return `<div class="activity-kicker">Flash card</div>${body}`;
+}
+
+function renderWheelQuestion(cur) {
+  const numbers = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+  const spokes = numbers.map((n, idx) => {
+    const angle = idx * 30;
+    const active = n === cur.q.k ? ' active' : '';
+    const scale = n === cur.q.k ? ' scale(1.18)' : '';
+    return `<div class="wheel-number${active}" style="--angle: ${angle}deg; transform: rotate(${angle}deg) translateY(-105px) rotate(-${angle}deg)${scale};">${n}</div>`;
+  }).join('');
+
+  return `
+    <div class="activity-kicker">Multiplication wheel</div>
+    <div class="wheel-activity">
+      <div class="wheel">
+        <div class="wheel-centre">×${cur.q.t}</div>
+        ${spokes}
+      </div>
+      <div class="${cur.q.isWord ? 'question-word' : 'question-text'}">${cur.q.prompt}</div>
+    </div>
+  `;
+}
+
+function renderMosaicQuestion(cur) {
+  const colors = ['#ec4899', '#f97316', '#0ea5e9', '#22c55e', '#a855f7', '#fbbf24'];
+  const cells = quiz.questions.map((item, idx) => {
+    const done = idx < quiz.index ? ' done' : '';
+    const active = idx === quiz.index ? ' target' : '';
+    const bg = idx < quiz.index ? ` style="background: ${colors[idx % colors.length]};"` : '';
+    return `<div class="mosaic-cell${done}${active}"${bg}>${idx < quiz.index ? '✓' : item.q.k}</div>`;
+  }).join('');
+
+  return `
+    <div class="activity-kicker">Mosaic tiles</div>
+    <div class="mosaic-activity">
+      <div class="mosaic-grid">${cells}</div>
+      <div class="${cur.q.isWord ? 'question-word' : 'question-text'}">${cur.q.prompt}</div>
+    </div>
+  `;
+}
+
+function renderSquareQuestion(cur) {
+  const factors = [1, 2, 5, 10];
+  if (!factors.includes(cur.q.k)) factors[rand(0, factors.length - 1)] = cur.q.k;
+  const sorted = factors.sort((a, b) => a - b);
+  let cells = '<div class="square-cell header">×</div>';
+  sorted.forEach(n => cells += `<div class="square-cell header">${n}</div>`);
+  cells += `<div class="square-cell header">${cur.q.t}</div>`;
+  sorted.forEach(n => {
+    const target = n === cur.q.k ? ' target' : '';
+    cells += `<div class="square-cell${target}">${n === cur.q.k ? '?' : cur.q.t * n}</div>`;
+  });
+  for (let row = 0; row < 3; row++) {
+    const fakeT = cur.q.t + row + 1;
+    cells += `<div class="square-cell header">${fakeT}</div>`;
+    sorted.forEach(n => cells += `<div class="square-cell">${fakeT * n}</div>`);
+  }
+
+  return `
+    <div class="activity-kicker">Multiplication square</div>
+    <div class="square-activity">
+      <div class="mini-square">${cells}</div>
+      <div class="${cur.q.isWord ? 'question-word' : 'question-text'}">${cur.q.prompt}</div>
+    </div>
+  `;
+}
+
+function renderBoardQuestion(cur) {
+  const spaces = quiz.questions.map((item, idx) => {
+    const cls = idx < quiz.index ? ' done' : idx === quiz.index ? ' active' : '';
+    return `<div class="path-space${cls}">${idx < quiz.index ? '✓' : idx + 1}</div>`;
+  }).join('');
+
+  return `
+    <div class="activity-kicker">${quiz.isSpeed ? 'Speed path' : 'Board path'}</div>
+    <div class="board-activity">
+      <div class="board-path">${spaces}</div>
+      <div class="${cur.q.isWord ? 'question-word' : 'question-text'}">${cur.q.prompt}</div>
+    </div>
+  `;
+}
+
+function answerQuestion(picked, btn) {
+  const cur = quiz.questions[quiz.index];
+  const isCorrect = picked === cur.correct;
+  const responseTime = quiz.questionStartedAt ? (Date.now() - quiz.questionStartedAt) / 1000 : 0;
+  quiz.responseTimes.push(responseTime);
+
+  // Disable all buttons
+  document.querySelectorAll('.option-btn').forEach(b => {
+    b.disabled = true;
+    if (parseInt(b.textContent) === cur.correct) b.classList.add('correct');
+    else if (b === btn) b.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.classList.remove('hidden');
+
+  if (isCorrect) {
+    quiz.correct++;
+    quiz.answeredCorrectly.push(true);
+    state.currentStreak++;
+    if (state.currentStreak > state.bestStreak) {
+      state.bestStreak = state.currentStreak;
+    }
+    fb.className = 'feedback correct';
+    fb.textContent = pickPraise();
+  } else {
+    quiz.answeredCorrectly.push(false);
+    state.currentStreak = 0;
+    fb.className = 'feedback wrong';
+    fb.textContent = `Not quite — it's ${cur.correct}. You'll get it next time!`;
+  }
+
+  // Auto-advance
+  const delay = quiz.isSpeed ? 700 : 1400;
+  quizAdvanceTimer = setTimeout(() => {
+    quizAdvanceTimer = null;
+    if (!quiz) return;
+    quiz.index++;
+    if (quiz.index >= quiz.questions.length) {
+      finishQuiz();
+    } else {
+      renderQuestion();
+    }
+  }, delay);
+}
+
+const PRAISE_OPTIONS = [
+  '🎉 Nailed it!', '⭐ Brilliant!', '✨ Yes!', '🚀 Smashed it!',
+  '👏 Great job!', '🔥 Boom!', '💪 Got it!', '🌟 Awesome!',
+  '🎯 Spot on!', '⚡ Lightning fast!', '🏆 Champion!', '😎 Cool!'
+];
+
+function pickPraise() {
+  return PRAISE_OPTIONS[Math.floor(Math.random() * PRAISE_OPTIONS.length)];
+}
+
+function finishQuiz() {
+  clearQuizAdvanceTimer();
+  if (quiz.timer) {
+    clearInterval(quiz.timer);
+    quiz.timer = null;
+  }
+
+  const total = quiz.questions.length;
+  const score = quiz.correct;
+  const pct = (score / total) * 100;
+  const avgResponse = quiz.responseTimes.length
+    ? quiz.responseTimes.reduce((sum, t) => sum + t, 0) / quiz.responseTimes.length
+    : 0;
+  const timeUsed = quiz.isSpeed ? quiz.timeLimit - quiz.timeLeft : 0;
+
+  let stars = 0;
+  let starsEarned = '';
+  let unlocked = null;
+  let isPB = false;
+
+  if (!quiz.isMixed) {
+    const t = quiz.table;
+    const prev = getTableProgress(t);
+    const updated = { ...prev };
+
+    if (quiz.mode === 'practice' && pct >= 80) {
+      if (!prev.practice) starsEarned += '⭐';
+      updated.practice = true;
+    }
+
+    if (quiz.mode === 'speed') {
+      if (score > prev.pb) {
+        updated.pb = score;
+        isPB = true;
+      }
+      if (pct >= 80 && !prev.speed2) {
+        updated.speed2 = true;
+        starsEarned += '⭐';
+      }
+      if (pct >= 90 && !prev.practice) {
+        updated.practice = true;
+        starsEarned += '⭐';
+      }
+      if (pct === 100 && !prev.speed3) {
+        updated.speed3 = true;
+        starsEarned += '⭐';
+      }
+    }
+
+    setTableProgress(t, updated);
+    stars = tableStarCount(t);
+    unlocked = checkUnlocks(t);
+  }
+
+  saveState();
+
+  // Build results card
+  let bigEmoji, headline, praise;
+  if (pct === 100)        { bigEmoji = '🏆'; headline = 'PERFECT!'; praise = 'You smashed it! Every single one correct!'; }
+  else if (pct >= 80)     { bigEmoji = '🌟'; headline = 'Brilliant!'; praise = 'You\'re really getting these!'; }
+  else if (pct >= 60)     { bigEmoji = '👍'; headline = 'Good work!'; praise = 'Keep practising — you\'re getting better!'; }
+  else if (pct >= 40)     { bigEmoji = '💪'; headline = 'Keep going!'; praise = 'Try the Learn mode again, then come back!'; }
+  else                    { bigEmoji = '🎓'; headline = 'Let\'s practise more!'; praise = 'Have another look at the Learn mode first.'; }
+
+  let starHTML = '';
+  if (!quiz.isMixed) {
+    starHTML = '<div class="star-display">';
+    const tStars = tableStarCount(quiz.table);
+    for (let i = 0; i < 3; i++) starHTML += i < tStars ? '⭐' : '☆';
+    starHTML += '</div>';
+  }
+
+  let pbHtml = '';
+  if (isPB && quiz.mode === 'speed') {
+    pbHtml = `<div class="pb-banner">🎯 New personal best! ${score}/${total}</div>`;
+  }
+
+  let paceHtml = '';
+  if (avgResponse) {
+    paceHtml = `<div style="margin-top: 8px; font-weight: 800; color: var(--muted);">Average answer: ${avgResponse.toFixed(1)}s${quiz.isSpeed ? ` • Time used: ${formatTime(timeUsed)}` : ''}</div>`;
+  }
+
+  let earnedHtml = '';
+  if (starsEarned) {
+    earnedHtml = `<div class="pb-banner" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-color: var(--success);">⭐ Earned ${starsEarned}</div>`;
+  }
+
+  let unlockHtml = '';
+  if (unlocked) {
+    unlockHtml = `<div class="unlock-banner">🎊 You unlocked the ${TABLE_META[unlocked].label}! ${TABLE_META[unlocked].emoji}</div>`;
+  }
+
+  const continueLabel = quiz.isMixed ? '🎲 Mixed again' : `🔁 ${quiz.mode === 'speed' ? 'Speed' : 'Practise'} again`;
+  const otherMode = quiz.mode === 'practice' ? 'speed' : 'practice';
+  const otherLabel = otherMode === 'speed' ? '⚡ Try Speed mode' : '🎯 Try Practice mode';
+
+  let actionsHtml = `<button class="btn-primary" onclick="restartQuiz()">${continueLabel}</button>`;
+  if (!quiz.isMixed) {
+    actionsHtml += `<button class="btn-secondary" onclick="switchToOtherMode('${otherMode}')">${otherLabel}</button>`;
+  }
+  actionsHtml += `<button class="btn-secondary" onclick="goHome()">🏠 Home</button>`;
+
+  document.getElementById('resultsCard').innerHTML = `
+    <div class="big-emoji">${bigEmoji}</div>
+    <h2>${headline}</h2>
+    <div class="praise">${praise}</div>
+    <div class="score-line">${score} out of ${total}</div>
+    ${paceHtml}
+    ${starHTML}
+    ${earnedHtml}
+    ${pbHtml}
+    ${unlockHtml}
+    <div class="results-actions">${actionsHtml}</div>
+  `;
+
+  showScreen('results');
+  if (pct >= 80) launchConfetti();
+  if (unlocked) setTimeout(() => launchConfetti(), 400);
+}
+
+function restartQuiz() {
+  if (quiz.isMixed) {
+    startMixed();
+  } else {
+    startQuiz(quiz.mode, quiz.activityStyle);
+  }
+}
+
+function switchToOtherMode(mode) {
+  clearQuizAdvanceTimer();
+  quiz = null;
+  switchMode(mode);
+  showScreen('table');
+}
+
+function goHome() {
+  clearQuizAdvanceTimer();
+  clearMTCRestTimer();
+  quiz = null;
+  mtc = null;
+  renderHome();
+  showScreen('home');
+}
+
+function startMixed() {
+  currentTable = null;
+  startQuiz('mixed');
+}
+
+/* ============================================================
+   MTC MODE
+   ============================================================ */
+
+let mtc = null;
+let mtcRestTimer = null;
+
+function clearMTCRestTimer() {
+  if (mtcRestTimer) {
+    clearInterval(mtcRestTimer);
+    mtcRestTimer = null;
+  }
+}
+
+const MTC_QUESTION_COUNT = 25;
+const MTC_TIME_PER_Q = 6;     // seconds
+const MTC_REST_TIME = 3;      // seconds
+const MTC_TABLE_WEIGHTS = {
+  // Higher weight = more questions. Spec emphasises 6,7,8,9,12.
+  2: 1, 3: 2, 4: 2, 5: 2, 6: 3, 7: 3, 8: 3, 9: 3, 10: 1, 11: 2, 12: 3,
+};
+
+function buildMTCQuestions() {
+  const questions = [];
+  // Build weighted pool
+  const pool = [];
+  for (const [t, w] of Object.entries(MTC_TABLE_WEIGHTS)) {
+    for (let i = 0; i < w; i++) pool.push(parseInt(t));
+  }
+
+  const usedKeys = new Set(); // avoid t×k AND k×t repeats per spec
+
+  while (questions.length < MTC_QUESTION_COUNT) {
+    const t = pool[rand(0, pool.length - 1)];
+    const k = rand(2, 12);
+    const key1 = `${t}x${k}`;
+    const key2 = `${k}x${t}`;
+    if (usedKeys.has(key1) || usedKeys.has(key2)) continue;
+    usedKeys.add(key1);
+
+    // Randomise direct vs reversed display
+    const reversed = Math.random() < 0.5;
+    const a = reversed ? k : t;
+    const b = reversed ? t : k;
+    questions.push({ a, b, answer: t * k, table: t });
+  }
+
+  return questions;
+}
+
+function startMTC() {
+  clearMTCRestTimer();
+  mtc = {
+    questions: buildMTCQuestions(),
+    index: 0,
+    score: 0,
+    answers: [],   // { table, correct }
+    answer: '',
+    timer: null,
+    timeLeft: MTC_TIME_PER_Q,
+    inRest: false,
+  };
+
+  showScreen('mtc');
+  renderMTCQuestion();
+}
+
+function renderMTCQuestion() {
+  const cur = mtc.questions[mtc.index];
+  document.getElementById('mtcProgress').textContent = `Question ${mtc.index + 1} of ${MTC_QUESTION_COUNT}`;
+  document.getElementById('mtcScore').textContent = `Score: ${mtc.score}`;
+
+  mtc.answer = '';
+  mtc.timeLeft = MTC_TIME_PER_Q;
+  mtc.inRest = false;
+
+  document.getElementById('mtcContent').innerHTML = `
+    <div class="mtc-question">
+      <div class="mtc-q-text">${cur.a} × ${cur.b} = ?</div>
+      <div class="mtc-answer-box" id="mtcAnswerBox">_</div>
+    </div>
+    <div class="numpad" id="mtcNumpad">
+      <button class="numpad-btn" data-d="7">7</button>
+      <button class="numpad-btn" data-d="8">8</button>
+      <button class="numpad-btn" data-d="9">9</button>
+      <button class="numpad-btn" data-d="4">4</button>
+      <button class="numpad-btn" data-d="5">5</button>
+      <button class="numpad-btn" data-d="6">6</button>
+      <button class="numpad-btn" data-d="1">1</button>
+      <button class="numpad-btn" data-d="2">2</button>
+      <button class="numpad-btn" data-d="3">3</button>
+      <button class="numpad-btn del" data-d="del">DEL</button>
+      <button class="numpad-btn" data-d="0">0</button>
+      <button class="numpad-btn enter" data-d="enter">✓</button>
+    </div>
+  `;
+
+  // Wire numpad
+  document.querySelectorAll('#mtcNumpad .numpad-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      const d = b.dataset.d;
+      if (d === 'del') {
+        mtc.answer = mtc.answer.slice(0, -1);
+      } else if (d === 'enter') {
+        submitMTC();
+        return;
+      } else {
+        if (mtc.answer.length < 3) mtc.answer += d;
+      }
+      document.getElementById('mtcAnswerBox').textContent = mtc.answer || '_';
+    });
+  });
+
+  startMTCTimer();
+}
+
+function startMTCTimer() {
+  const fill = document.getElementById('mtcTimerFill');
+  const startTime = Date.now();
+  if (mtc.timer) clearInterval(mtc.timer);
+
+  mtc.timer = setInterval(() => {
+    const elapsed = (Date.now() - startTime) / 1000;
+    const remaining = Math.max(0, MTC_TIME_PER_Q - elapsed);
+    if (fill) fill.style.width = (remaining / MTC_TIME_PER_Q * 100) + '%';
+    if (remaining <= 0) {
+      clearInterval(mtc.timer);
+      mtc.timer = null;
+      submitMTC(true);
+    }
+  }, 50);
+}
+
+function submitMTC(timeout = false) {
+  if (mtc.timer) {
+    clearInterval(mtc.timer);
+    mtc.timer = null;
+  }
+  const cur = mtc.questions[mtc.index];
+  const given = parseInt(mtc.answer);
+  const isCorrect = given === cur.answer;
+  if (isCorrect) mtc.score++;
+  mtc.answers.push({ table: cur.table, correct: isCorrect, expected: cur.answer, given: isNaN(given) ? null : given });
+
+  mtc.index++;
+  if (mtc.index >= MTC_QUESTION_COUNT) {
+    finishMTC();
+  } else {
+    showMTCRest();
+  }
+}
+
+function showMTCRest() {
+  mtc.inRest = true;
+  clearMTCRestTimer();
+  let countdown = MTC_REST_TIME;
+  document.getElementById('mtcContent').innerHTML = `
+    <div class="mtc-rest">
+      <div class="countdown" id="mtcCountdown">${countdown}</div>
+      <p>Get ready...</p>
+    </div>
+  `;
+  document.getElementById('mtcTimerFill').style.width = '100%';
+
+  mtcRestTimer = setInterval(() => {
+    if (!mtc) {
+      clearMTCRestTimer();
+      return;
+    }
+    countdown--;
+    const el = document.getElementById('mtcCountdown');
+    if (el) el.textContent = countdown;
+    if (countdown <= 0) {
+      clearMTCRestTimer();
+      renderMTCQuestion();
+    }
+  }, 1000);
+}
+
+function finishMTC() {
+  clearMTCRestTimer();
+  const score = mtc.score;
+  const isPB = score > (state.mtcBest || 0);
+  if (isPB) state.mtcBest = score;
+  saveState();
+
+  // Build per-table breakdown
+  const breakdown = {};
+  mtc.answers.forEach(a => {
+    if (!breakdown[a.table]) breakdown[a.table] = { right: 0, total: 0 };
+    breakdown[a.table].total++;
+    if (a.correct) breakdown[a.table].right++;
+  });
+
+  let breakdownHtml = '<div class="breakdown"><h4>📊 How you did:</h4>';
+  const sortedTables = Object.keys(breakdown).map(Number).sort((a, b) => a - b);
+  sortedTables.forEach(t => {
+    const b = breakdown[t];
+    const pct = Math.round((b.right / b.total) * 100);
+    const cls = pct >= 80 ? 'good' : pct < 50 ? 'bad' : '';
+    breakdownHtml += `
+      <div class="breakdown-row">
+        <span>${TABLE_META[t]?.emoji || ''} ${t}× table</span>
+        <span class="pct ${cls}">${b.right}/${b.total}</span>
+      </div>
+    `;
+  });
+  breakdownHtml += '</div>';
+
+  let bigEmoji, headline, praise;
+  if (score === 25)       { bigEmoji = '🏆'; headline = 'FULL MARKS!'; praise = 'Year 4 ready! Incredible work!'; }
+  else if (score >= 20)   { bigEmoji = '🌟'; headline = 'Brilliant!'; praise = 'You\'re really, really good at these!'; }
+  else if (score >= 15)   { bigEmoji = '🎯'; headline = 'Good effort!'; praise = 'Keep practising the trickier tables!'; }
+  else if (score >= 10)   { bigEmoji = '💪'; headline = 'Keep going!'; praise = 'You\'re getting there. Practice each table!'; }
+  else                    { bigEmoji = '🎓'; headline = 'Plenty to learn!'; praise = 'Take it slow — work through each table.'; }
+
+  const pbHtml = isPB ? `<div class="pb-banner">🎯 New personal best!</div>` : (state.mtcBest ? `<div style="margin-top: 8px; font-weight: 700; color: var(--muted);">Your best: ${state.mtcBest}/25</div>` : '');
+
+  document.getElementById('resultsCard').innerHTML = `
+    <div class="big-emoji">${bigEmoji}</div>
+    <h2>${headline}</h2>
+    <div class="praise">${praise}</div>
+    <div class="score-line">${score} out of 25</div>
+    ${pbHtml}
+    ${breakdownHtml}
+    <div class="results-actions">
+      <button class="btn-primary" onclick="startMTC()">🔁 Try again</button>
+      <button class="btn-secondary" onclick="goHome()">🏠 Home</button>
+    </div>
+  `;
+
+  showScreen('results');
+  if (score >= 20) launchConfetti();
+  if (score === 25) setTimeout(() => launchConfetti(), 500);
+}
+
+/* ============================================================
+   CONFETTI 🎉
+   ============================================================ */
+
+function launchConfetti() {
+  const colors = ['#ec4899', '#f97316', '#0ea5e9', '#22c55e', '#a855f7', '#fbbf24', '#14b8a6'];
+  for (let i = 0; i < 50; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.animationDelay = Math.random() * 0.4 + 's';
+    el.style.animationDuration = (1.6 + Math.random()) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2500);
+  }
+}
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+
+document.querySelectorAll('.mode-tab').forEach(b => {
+  b.addEventListener('click', () => switchMode(b.dataset.mode));
+});
+
+document.getElementById('backFromTable').addEventListener('click', () => {
+  renderHome();
+  showScreen('home');
+});
+
+document.getElementById('backFromQuiz').addEventListener('click', () => {
+  if (quiz?.timer) clearInterval(quiz.timer);
+  if (confirm('Quit this quiz? Your progress in this round won\'t be saved.')) {
+    clearQuizAdvanceTimer();
+    quiz = null;
+    if (currentTable) {
+      switchMode(currentMode);
+      showScreen('table');
+    } else {
+      goHome();
+    }
+  } else if (quiz?.isSpeed) {
+    startTimer();
+  }
+});
+
+document.getElementById('backFromMTC').addEventListener('click', () => {
+  if (mtc?.timer) clearInterval(mtc.timer);
+  if (confirm('Quit the MTC? Your score won\'t be saved.')) {
+    clearMTCRestTimer();
+    mtc = null;
+    goHome();
+  } else if (mtc) {
+    // resume - rebuild current question to restart timer cleanly
+    if (mtc.inRest) {
+      // re-show rest (best effort - just continue)
+    } else {
+      startMTCTimer();
+    }
+  }
+});
+
+document.getElementById('resetBtn').addEventListener('click', async () => {
+  if (confirm('Reset ALL progress? This cannot be undone.')) {
+    state = {
+      stars: {},
+      unlocked: [2],
+      bestStreak: 0,
+      currentStreak: 0,
+      mtcBest: 0,
+    };
+    await saveState();
+    renderHome();
+  }
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+
+(async function init() {
+  // Run validation in dev (silent in console)
+  validateGenerators();
+
+  await loadState();
+  renderHome();
+})();
+</script>
+</body>
+</html>
