@@ -420,7 +420,7 @@
   /* Mode tabs */
   .mode-tabs {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     margin-bottom: 18px;
   }
@@ -599,6 +599,367 @@
     font-weight: 600;
     font-size: 0.95rem;
     line-height: 1.4;
+  }
+
+  /* ============================================================
+     SHEETS MODE
+     ============================================================ */
+  .sheet-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  @media (max-width: 420px) {
+    .sheet-options { grid-template-columns: 1fr; }
+  }
+
+  .sheet-page {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+    padding: 22px;
+    margin-top: 14px;
+    color: #111827;
+    min-height: 920px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sheet-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 3px solid #111827;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+    align-items: flex-end;
+  }
+
+  .sheet-header h3 {
+    font-size: 1.7rem;
+    margin: 0;
+  }
+
+  .sheet-meta {
+    font-weight: 800;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .sheet-name-row {
+    display: grid;
+    grid-template-columns: 1fr 150px;
+    gap: 16px;
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+
+  .sheet-line {
+    display: inline-block;
+    border-bottom: 2px solid #111827;
+    min-width: 120px;
+    height: 1.4em;
+    vertical-align: bottom;
+  }
+
+  .sheet-grid {
+    display: grid;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .sheet-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .sheet-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .sheet-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .sheet-item {
+    border: 2px solid #111827;
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 60px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .sheet-answer {
+    min-width: 48px;
+    min-height: 34px;
+    border: 2px solid #111827;
+    border-radius: 6px;
+    background: #fff;
+    display: inline-grid;
+    place-items: center;
+    padding: 2px 6px;
+  }
+
+  .sheet-small {
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  .worked-example {
+    border: 3px solid #111827;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    background: #f8fafc;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.05rem;
+  }
+
+  .worked-example span {
+    display: inline-block;
+    margin-left: 8px;
+    color: #0f766e;
+  }
+
+  .sheet-wheel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    flex: 1;
+    align-items: center;
+  }
+
+  .sheet-wheel {
+    border: 3px solid #111827;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    position: relative;
+    min-height: 190px;
+  }
+
+  .sheet-wheel-centre {
+    position: absolute;
+    inset: 36%;
+    border: 2px solid #111827;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+  }
+
+  .sheet-wheel-number {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 24px;
+    height: 24px;
+    margin: -12px;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    font-size: 0.8rem;
+    transform: rotate(var(--angle)) translateY(-72px) rotate(calc(-1 * var(--angle)));
+  }
+
+  .sheet-wheel-blank {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 34px;
+    height: 24px;
+    margin: -12px -17px;
+    border: 2px solid #111827;
+    border-radius: 5px;
+    transform: rotate(var(--angle)) translateY(-102px) rotate(calc(-1 * var(--angle)));
+    background: white;
+  }
+
+  .factor-bug-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    flex: 1;
+  }
+
+  .factor-bug {
+    position: relative;
+    border: none;
+    padding: 12px;
+    text-align: center;
+    min-height: 250px;
+    display: grid;
+    place-items: center;
+  }
+
+  .bug-number {
+    display: inline-grid;
+    place-items: center;
+    width: 112px;
+    height: 88px;
+    border: 3px solid #111827;
+    border-radius: 50% 50% 45% 45%;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.7rem;
+    background: white;
+    position: relative;
+  }
+
+  .bug-number::before,
+  .bug-number::after {
+    content: "";
+    position: absolute;
+    top: 22px;
+    width: 10px;
+    height: 10px;
+    background: #111827;
+    border-radius: 50%;
+  }
+
+  .bug-number::before { left: 28px; }
+  .bug-number::after { right: 28px; }
+
+  .bug-antenna {
+    position: absolute;
+    top: 34px;
+    left: 50%;
+    width: 96px;
+    height: 48px;
+    transform: translateX(-50%);
+    border-top: 3px solid #111827;
+    border-radius: 60% 60% 0 0;
+    pointer-events: none;
+  }
+
+  .bug-legs {
+    position: absolute;
+    inset: 24px 8px 18px;
+    pointer-events: none;
+  }
+
+  .bug-leg {
+    position: absolute;
+    width: 106px;
+    border-top: 3px solid #111827;
+    transform-origin: center;
+  }
+
+  .bug-leg .sheet-answer {
+    position: absolute;
+    top: -20px;
+    background: white;
+    pointer-events: auto;
+  }
+
+  .bug-leg.left { left: 4px; }
+  .bug-leg.right { right: 4px; }
+  .bug-leg.left .sheet-answer { left: 0; }
+  .bug-leg.right .sheet-answer { right: 0; }
+  .bug-leg.l1 { top: 64px; transform: rotate(18deg); }
+  .bug-leg.l2 { top: 118px; transform: rotate(0deg); }
+  .bug-leg.l3 { top: 172px; transform: rotate(-18deg); }
+  .bug-leg.r1 { top: 64px; transform: rotate(-18deg); }
+  .bug-leg.r2 { top: 118px; transform: rotate(0deg); }
+  .bug-leg.r3 { top: 172px; transform: rotate(18deg); }
+
+  .sheet-body-fill {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sheet-skip {
+    border-top: 3px solid #111827;
+    margin-top: auto;
+    padding-top: 12px;
+  }
+
+  .sheet-skip h4 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+  }
+
+  .skip-boxes {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 6px;
+  }
+
+  .skip-box {
+    aspect-ratio: 1.45;
+    border: 2px solid #111827;
+    border-radius: 5px;
+    background: white;
+  }
+
+  .sheet-controls {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  @media print {
+    body { background: white !important; }
+    body * { visibility: hidden !important; }
+    .sheet-page, .sheet-page * { visibility: visible !important; }
+    .sheet-page {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      margin: 0;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 12mm;
+      min-height: 277mm;
+    }
+    .sheet-controls { display: none !important; }
+  }
+
+  @media (max-width: 700px) {
+    .sheet-page {
+      padding: 16px;
+      min-height: 820px;
+    }
+
+    .sheet-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .sheet-name-row {
+      grid-template-columns: 1fr;
+    }
+
+    .sheet-wheel-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sheet-wheel {
+      min-height: 160px;
+    }
+
+    .sheet-wheel-number {
+      transform: rotate(var(--angle)) translateY(-60px) rotate(calc(-1 * var(--angle)));
+    }
+
+    .sheet-wheel-blank {
+      transform: rotate(var(--angle)) translateY(-84px) rotate(calc(-1 * var(--angle)));
+    }
+
+    .factor-bug-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .skip-boxes {
+      gap: 4px;
+    }
   }
 
   /* ============================================================
@@ -1283,6 +1644,8 @@
     <div class="special-row" id="specialRow"></div>
 
     <div class="reset-area">
+      <button class="reset-btn" id="transferBtn">Transfer progress to another device</button>
+      <br>
       <button class="reset-btn" id="resetBtn">Reset all progress</button>
     </div>
 
@@ -1304,6 +1667,9 @@
       </button>
       <button class="mode-tab" data-mode="speed">
         <span class="icon">⚡</span><span class="text">Speed</span>
+      </button>
+      <button class="mode-tab" data-mode="sheets">
+        <span class="icon">✏️</span><span class="text">Sheets</span>
       </button>
     </div>
 
@@ -1431,6 +1797,49 @@ async function saveState() {
   }
 }
 
+function encodeProgress(stateToEncode = state) {
+  const safeState = {
+    stars: stateToEncode.stars || {},
+    unlocked: stateToEncode.unlocked || [2],
+    unlockAll: !!stateToEncode.unlockAll,
+    bestStreak: stateToEncode.bestStreak || 0,
+    currentStreak: stateToEncode.currentStreak || 0,
+    mtcBest: stateToEncode.mtcBest || 0,
+  };
+  return btoa(unescape(encodeURIComponent(JSON.stringify(safeState))));
+}
+
+function decodeProgress(raw) {
+  const parsed = JSON.parse(decodeURIComponent(escape(atob(raw))));
+  return {
+    stars: parsed.stars && typeof parsed.stars === 'object' ? parsed.stars : {},
+    unlocked: Array.isArray(parsed.unlocked) ? parsed.unlocked.filter(t => TABLE_ORDER.includes(t)) : [2],
+    unlockAll: !!parsed.unlockAll,
+    bestStreak: Number(parsed.bestStreak) || 0,
+    currentStreak: Number(parsed.currentStreak) || 0,
+    mtcBest: Number(parsed.mtcBest) || 0,
+  };
+}
+
+async function importProgressFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get('progress');
+  if (!raw) return;
+
+  try {
+    const imported = decodeProgress(raw);
+    if (confirm('Import times tables progress from another device?')) {
+      state = { ...state, ...imported };
+      if (!state.unlocked.includes(2)) state.unlocked.push(2);
+      await saveState();
+    }
+  } catch (e) {
+    alert('Sorry, that progress link did not work.');
+  } finally {
+    window.history.replaceState({}, document.title, window.location.href.split('?')[0].split('#')[0]);
+  }
+}
+
 function getTableProgress(t) {
   return state.stars[t] || { practice: false, speed2: false, speed3: false, pb: 0 };
 }
@@ -1508,6 +1917,21 @@ const WORD_TEMPLATES = [
   (n, k) => `${k} bags contain ${n} apples each. How many apples in total?`,
   (n, k) => `A football team has ${n} players. How many players in ${k} teams?`,
   (n, k) => `${k} flowers each have ${n} petals. How many petals altogether?`,
+];
+
+const SHEET_TYPES = [
+  { id: 'wheel', label: 'Multiplication wheels', sub: 'Circle wheels with blank answers' },
+  { id: 'full-table', label: 'Full table fill-in', sub: 'All facts from 1 to 12' },
+  { id: 'missing-product', label: 'Missing answers', sub: '2 × 7 = __' },
+  { id: 'missing-factor', label: 'Missing numbers', sub: '2 × __ = 14' },
+  { id: 'mixed-direction', label: 'Mixed directions', sub: 'Multiply, reverse, divide' },
+  { id: 'fact-families', label: 'Fact families', sub: 'Two multiplications, two divisions' },
+  { id: 'square', label: 'Multiplication square', sub: 'Fill missing grid cells' },
+  { id: 'arrays', label: 'Arrays', sub: 'Draw groups and totals' },
+  { id: 'word-problems', label: 'Word problems', sub: 'Simple story questions' },
+  { id: 'speed-grid', label: 'Speed grid', sub: '48 quick-fire facts' },
+  { id: 'factor-bugs', label: 'Factor bugs', sub: 'Year 4 factor pairs' },
+  { id: 'multiples', label: 'Multiples finder', sub: 'Spot multiples in a grid' },
 ];
 
 /**
@@ -1992,6 +2416,9 @@ function switchMode(mode) {
           <button class="btn-secondary" onclick="startQuiz('practice', 'mosaic')">Mosaic tiles</button>
           <button class="btn-secondary" onclick="startQuiz('practice', 'square')">Multiplication square</button>
           <button class="btn-secondary" onclick="startQuiz('practice', 'board')">Board path</button>
+          <button class="btn-secondary" onclick="startQuiz('practice', 'missing-factor')">Missing numbers</button>
+          <button class="btn-secondary" onclick="startQuiz('practice', 'fact-family')">Fact families</button>
+          <button class="btn-secondary" onclick="startQuiz('practice', 'mixed-direction')">Mixed directions</button>
         </div>
       </div>
     `;
@@ -2010,7 +2437,235 @@ function switchMode(mode) {
         <button class="btn-primary" onclick="startQuiz('speed', 'board')">Go!</button>
       </div>
     `;
+  } else if (mode === 'sheets') {
+    renderSheetsMode();
   }
+}
+
+function renderSheetsMode(selectedType = null) {
+  const optionsHtml = SHEET_TYPES.map(type => `
+    <button class="${selectedType === type.id ? 'btn-primary' : 'btn-secondary'}" onclick="renderSheetsMode('${type.id}')">
+      ${type.label}<br><span style="font-size: 0.82rem; font-weight: 700; opacity: 0.8;">${type.sub}</span>
+    </button>
+  `).join('');
+
+  const sheetHtml = selectedType ? renderWorksheet(selectedType, currentTable) : '';
+  document.getElementById('modeContent').innerHTML = `
+    <div class="learn-card">
+      <h3>✏️ Sheets</h3>
+      <p style="margin: 8px 0 14px; line-height: 1.5;">Fresh worksheets for printing or filling in on an iPad. Nothing written here is saved.</p>
+      <div class="sheet-options">${optionsHtml}</div>
+    </div>
+    ${sheetHtml}
+  `;
+}
+
+function renderWorksheet(type, t) {
+  const meta = TABLE_META[t];
+  const title = SHEET_TYPES.find(s => s.id === type)?.label || 'Practice sheet';
+  return `
+    <div class="sheet-page" id="activeSheet">
+      <div class="sheet-header">
+        <div>
+          <h3>${meta.emoji} ${title}</h3>
+          <div class="sheet-meta">${meta.label} • ${new Date().toLocaleDateString('en-GB')}</div>
+        </div>
+        <div class="sheet-meta">Print or use on iPad</div>
+      </div>
+      <div class="sheet-name-row">
+        <div>Name: <span class="sheet-line"></span></div>
+        <div>Date: <span class="sheet-line"></span></div>
+      </div>
+      ${renderWorkedExample(type, t)}
+      <div class="sheet-body-fill">${renderSheetBody(type, t)}</div>
+      ${renderSkipCountingStrip(t)}
+    </div>
+    <div class="sheet-controls">
+      <button class="btn-primary" onclick="window.print()">Print sheet</button>
+      <button class="btn-secondary" onclick="clearSheetAnswers()">Clear answers</button>
+    </div>
+  `;
+}
+
+function renderWorkedExample(type, t) {
+  const exampleK = 3;
+  const product = t * exampleK;
+  const examples = {
+    'wheel': `Example: ${t} × ${exampleK} = <span>${product}</span>`,
+    'full-table': `Example: ${t} × ${exampleK} = <span>${product}</span>`,
+    'missing-product': `Example: ${t} × ${exampleK} = <span>${product}</span>`,
+    'missing-factor': `Example: ${t} × <span>${exampleK}</span> = ${product}`,
+    'mixed-direction': `Example: ${product} ÷ ${t} = <span>${exampleK}</span>`,
+    'fact-families': `Example: ${t}, ${exampleK}, ${product}: <span>${t} × ${exampleK} = ${product}</span>`,
+    'square': `Example: row ${t}, column ${exampleK} gives <span>${product}</span>`,
+    'arrays': `Example: ${exampleK} groups of ${t} has <span>${product}</span> dots`,
+    'word-problems': `Example: ${exampleK} bags with ${t} apples each = <span>${product}</span> apples`,
+    'speed-grid': `Example: ${t}×${exampleK}=<span>${product}</span>`,
+    'factor-bugs': `Example: factor pair for ${product}: <span>${t} × ${exampleK}</span>`,
+    'multiples': `Example: <span>${product}</span> is a multiple of ${t}`,
+  };
+  return `<div class="worked-example">${examples[type] || examples['full-table']}</div>`;
+}
+
+function answerBox(size = '') {
+  return `<span class="sheet-answer ${size}" contenteditable="true" inputmode="numeric" spellcheck="false"></span>`;
+}
+
+function renderSkipCountingStrip(t) {
+  const boxes = Array.from({ length: 12 }, () => '<div class="skip-box" contenteditable="true" inputmode="numeric"></div>').join('');
+  return `
+    <div class="sheet-skip">
+      <h4>Skip count in ${t}s</h4>
+      <div class="skip-boxes">${boxes}</div>
+    </div>
+  `;
+}
+
+function renderSheetBody(type, t) {
+  if (type === 'wheel') return renderSheetWheels(t);
+  if (type === 'full-table') return renderFullTableSheet(t);
+  if (type === 'missing-product') return renderMissingProductSheet(t);
+  if (type === 'missing-factor') return renderMissingFactorSheet(t);
+  if (type === 'mixed-direction') return renderMixedDirectionSheet(t);
+  if (type === 'fact-families') return renderFactFamiliesSheet(t);
+  if (type === 'square') return renderSquareSheet(t);
+  if (type === 'arrays') return renderArraysSheet(t);
+  if (type === 'word-problems') return renderWordProblemsSheet(t);
+  if (type === 'speed-grid') return renderSpeedGridSheet(t);
+  if (type === 'factor-bugs') return renderFactorBugsSheet(t);
+  if (type === 'multiples') return renderMultiplesSheet(t);
+  return renderFullTableSheet(t);
+}
+
+function renderFullTableSheet(t) {
+  const rows = Array.from({ length: 12 }, (_, i) => {
+    const k = i + 1;
+    return `<div class="sheet-item">${t} × ${k} = ${answerBox()}</div>`;
+  }).join('');
+  return `<div class="sheet-grid cols-3" style="align-content: stretch;">${rows}</div>`;
+}
+
+function renderMissingProductSheet(t) {
+  const ks = shuffle([...Array(12)].map((_, i) => i + 1).concat([...Array(12)].map((_, i) => i + 1)));
+  return `<div class="sheet-grid cols-3">${ks.map(k => `<div class="sheet-item">${t} × ${k} = ${answerBox()}</div>`).join('')}</div>`;
+}
+
+function renderMissingFactorSheet(t) {
+  const ks = shuffle([...Array(12)].map((_, i) => i + 1).concat([...Array(12)].map((_, i) => i + 1)));
+  return `<div class="sheet-grid cols-3">${ks.map(k => `<div class="sheet-item">${t} × ${answerBox()} = ${t * k}</div>`).join('')}</div>`;
+}
+
+function renderMixedDirectionSheet(t) {
+  const items = [];
+  shuffle([...Array(12)].map((_, i) => i + 1)).forEach(k => {
+    items.push(`${t} × ${k} = ${answerBox()}`);
+    items.push(`${t * k} ÷ ${t} = ${answerBox()}`);
+  });
+  return `<div class="sheet-grid cols-2">${items.map(x => `<div class="sheet-item">${x}</div>`).join('')}</div>`;
+}
+
+function renderFactFamiliesSheet(t) {
+  const ks = shuffle([...Array(8)].map((_, i) => i + 2));
+  return `<div class="sheet-grid cols-2">${ks.map(k => `
+    <div class="sheet-item sheet-small">
+      ${t}, ${k}, ${t * k}<br>
+      ${answerBox()} × ${answerBox()} = ${answerBox()}<br>
+      ${answerBox()} × ${answerBox()} = ${answerBox()}<br>
+      ${answerBox()} ÷ ${answerBox()} = ${answerBox()}<br>
+      ${answerBox()} ÷ ${answerBox()} = ${answerBox()}
+    </div>
+  `).join('')}</div>`;
+}
+
+function renderSheetWheels(t) {
+  const wheels = [t, t, t, t, t, t].map((centre, idx) => {
+    const nums = shuffle([...Array(12)].map((_, i) => i + 1));
+    const spokes = nums.map((n, i) => {
+      const angle = i * 30;
+      return `
+        <span class="sheet-wheel-number" style="--angle:${angle}deg;">${n}</span>
+        <span class="sheet-wheel-blank" style="--angle:${angle}deg;" contenteditable="true" inputmode="numeric"></span>
+      `;
+    }).join('');
+    return `<div class="sheet-wheel"><div class="sheet-wheel-centre">×${centre}</div>${spokes}</div>`;
+  }).join('');
+  return `<div class="sheet-wheel-grid">${wheels}</div>`;
+}
+
+function renderSquareSheet(t) {
+  const headers = [1, 2, 3, 4, 5, 6, 7, 8];
+  let html = '<div class="sheet-grid" style="grid-template-columns: repeat(9, 1fr); gap: 4px;">';
+  html += '<div class="sheet-item">×</div>' + headers.map(h => `<div class="sheet-item">${h}</div>`).join('');
+  [t, t + 1, t + 2, t + 3].forEach(row => {
+    html += `<div class="sheet-item">${row}</div>`;
+    headers.forEach(h => html += `<div class="sheet-item">${Math.random() < 0.45 ? row * h : answerBox()}</div>`);
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderArraysSheet(t) {
+  const ks = shuffle([2, 3, 4, 5, 6, 7, 8, 9]);
+  return `<div class="sheet-grid cols-2">${ks.map(k => `
+    <div class="sheet-item sheet-small" style="min-height: 118px; align-items: flex-start;">
+      Draw ${k} groups of ${t}.<br>Total = ${answerBox()}
+    </div>
+  `).join('')}</div>`;
+}
+
+function renderWordProblemsSheet(t) {
+  const ks = shuffle([2, 3, 4, 5, 6, 7, 8, 9]);
+  return `<div class="sheet-grid cols-2">${ks.map(k => {
+    const prompt = WORD_TEMPLATES[rand(0, WORD_TEMPLATES.length - 1)](t, k);
+    return `<div class="sheet-item sheet-small" style="justify-content: flex-start; text-align: left;">${prompt}<br>Answer: ${answerBox()}</div>`;
+  }).join('')}</div>`;
+}
+
+function renderSpeedGridSheet(t) {
+  const ks = shuffle([...Array(12)].map((_, i) => i + 1).concat([...Array(12)].map((_, i) => i + 1), [...Array(12)].map((_, i) => i + 1), [...Array(12)].map((_, i) => i + 1)));
+  return `
+    <div class="sheet-meta" style="margin-bottom: 10px;">Try 1: <span class="sheet-line"></span> Try 2: <span class="sheet-line"></span> Try 3: <span class="sheet-line"></span></div>
+    <div class="sheet-grid cols-4">${ks.map(k => `<div class="sheet-item">${t}×${k}=${answerBox()}</div>`).join('')}</div>
+  `;
+}
+
+function factorPairs(n) {
+  const pairs = [];
+  for (let i = 1; i <= Math.sqrt(n); i++) {
+    if (n % i === 0) pairs.push([i, n / i]);
+  }
+  return pairs;
+}
+
+function renderFactorBugsSheet(t) {
+  const numbers = shuffle([t * 6, t * 8, t * 9, t * 10, t * 12, 24, 36, 48]).slice(0, 4);
+  return `<div class="factor-bug-grid">${numbers.map(n => {
+    const legs = [
+      ['left l1', 'left l2', 'left l3'],
+      ['right r1', 'right r2', 'right r3'],
+    ].flat().map(cls => `<div class="bug-leg ${cls}">${answerBox()}</div>`).join('');
+    return `
+      <div class="factor-bug">
+        <div class="bug-antenna"></div>
+        <div class="bug-number">${n}</div>
+        <div class="bug-legs">${legs}</div>
+      </div>
+    `;
+  }).join('')}</div>`;
+}
+
+function renderMultiplesSheet(t) {
+  const nums = shuffle([...Array(48)].map((_, i) => i + 1));
+  return `
+    <div class="sheet-meta" style="margin-bottom: 10px;">Circle or colour the multiples of ${t}.</div>
+    <div class="sheet-grid cols-4">${nums.map(n => `<div class="sheet-item">${n}</div>`).join('')}</div>
+  `;
+}
+
+function clearSheetAnswers() {
+  document.querySelectorAll('#activeSheet [contenteditable="true"]').forEach(el => {
+    el.textContent = '';
+  });
 }
 
 /* ============================================================
@@ -2027,7 +2682,7 @@ function clearQuizAdvanceTimer() {
   }
 }
 
-const PRACTICE_STYLES = ['classic', 'wheel', 'mosaic', 'square', 'board'];
+const PRACTICE_STYLES = ['classic', 'wheel', 'mosaic', 'square', 'board', 'missing-factor', 'fact-family', 'mixed-direction'];
 
 function pickPracticeStyle(requested) {
   if (requested === 'mixed-style') return PRACTICE_STYLES[rand(0, PRACTICE_STYLES.length - 1)];
@@ -2046,7 +2701,8 @@ function startQuiz(mode, activityStyle = 'classic') {
     ? availableMixedTables() // mixed pulls from earned tables, or all tables when the switch is on
     : [currentTable];
   const opts = isSpeed ? { allowComplex: false } : { allowComplex: true };
-  const questions = buildFullTableQuestions(tables, total, opts);
+  const questions = buildFullTableQuestions(tables, total, opts)
+    .map((item, idx) => styleQuestionForPractice(item, style, idx));
 
   quiz = {
     mode,
@@ -2073,6 +2729,24 @@ function startQuiz(mode, activityStyle = 'classic') {
     startTimer();
   }
   renderQuestion();
+}
+
+function styleQuestionForPractice(item, style, idx) {
+  const { t, k, product } = item.q;
+  let q = item.q;
+
+  if (style === 'missing-factor' || style === 'fact-family') {
+    q = { ...q, type: 2, prompt: `${t} × ? = ${product}`, answer: k, isWord: false };
+  } else if (style === 'mixed-direction') {
+    const variant = idx % 4;
+    if (variant === 0) q = { ...q, type: 0, prompt: `${t} × ${k} = ?`, answer: product, isWord: false };
+    if (variant === 1) q = { ...q, type: 1, prompt: `${k} × ${t} = ?`, answer: product, isWord: false };
+    if (variant === 2) q = { ...q, type: 3, prompt: `${product} ÷ ${t} = ?`, answer: k, isWord: false };
+    if (variant === 3) q = { ...q, type: 2, prompt: `${t} × ? = ${product}`, answer: k, isWord: false };
+  }
+
+  const { options, correct } = generateOptions(q);
+  return { q, options, correct };
 }
 
 function startTimer() {
@@ -2137,10 +2811,40 @@ function renderActivityQuestion(cur, style) {
   if (style === 'mosaic') return renderMosaicQuestion(cur);
   if (style === 'square') return renderSquareQuestion(cur);
   if (style === 'board') return renderBoardQuestion(cur);
+  if (style === 'missing-factor') return renderMissingFactorQuestion(cur);
+  if (style === 'fact-family') return renderFactFamilyQuestion(cur);
+  if (style === 'mixed-direction') return renderMixedDirectionQuestion(cur);
   const body = cur.q.isWord
     ? `<div class="question-word">${cur.q.prompt}</div>`
     : `<div class="question-text">${cur.q.prompt}</div>`;
   return `<div class="activity-kicker">Flash card</div>${body}`;
+}
+
+function renderMissingFactorQuestion(cur) {
+  return `
+    <div class="activity-kicker">Missing number</div>
+    <div class="question-text">${cur.q.t} × ? = ${cur.q.product}</div>
+  `;
+}
+
+function renderFactFamilyQuestion(cur) {
+  return `
+    <div class="activity-kicker">Fact family</div>
+    <div class="sheet-grid cols-2" style="max-width: 420px; width: 100%; margin: 0 auto 12px;">
+      <div class="sheet-item">${cur.q.t} × ${cur.q.k} = ${cur.q.product}</div>
+      <div class="sheet-item">${cur.q.k} × ${cur.q.t} = ${cur.q.product}</div>
+      <div class="sheet-item">${cur.q.product} ÷ ${cur.q.t} = ?</div>
+      <div class="sheet-item">${cur.q.product} ÷ ${cur.q.k} = ${cur.q.t}</div>
+    </div>
+    <div class="question-word">What is the missing number?</div>
+  `;
+}
+
+function renderMixedDirectionQuestion(cur) {
+  return `
+    <div class="activity-kicker">Mixed directions</div>
+    <div class="question-text">${cur.q.prompt}</div>
+  `;
 }
 
 function renderWheelQuestion(cur) {
@@ -2733,6 +3437,21 @@ document.getElementById('unlockAllToggle').addEventListener('click', async () =>
   renderHome();
 });
 
+document.getElementById('transferBtn').addEventListener('click', async () => {
+  const baseUrl = window.location.href.split('?')[0].split('#')[0];
+  const url = `${baseUrl}?progress=${encodeURIComponent(encodeProgress())}`;
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(url);
+      alert('Progress transfer link copied. Open it on the other device.');
+      return;
+    } catch (e) {
+      // Fall back to prompt below.
+    }
+  }
+  prompt('Copy this progress transfer link and open it on the other device:', url);
+});
+
 document.getElementById('resetBtn').addEventListener('click', async () => {
   if (confirm('Reset ALL progress? This cannot be undone.')) {
     state = {
@@ -2757,6 +3476,7 @@ document.getElementById('resetBtn').addEventListener('click', async () => {
   validateGenerators();
 
   await loadState();
+  await importProgressFromUrl();
   renderHome();
 })();
 </script>
